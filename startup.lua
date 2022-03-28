@@ -205,7 +205,7 @@ function tempColor(temp)
 end
 
 function shieldStrengthText(strength)
-    return ((strength / 100000000) * 10)
+    return ((strength / 100000000) * 100)
 
 end
 
