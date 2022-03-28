@@ -104,5 +104,4 @@ function update()
 
     end
 end
-
-parallel.waitForAny(buttons, update)
+update()
