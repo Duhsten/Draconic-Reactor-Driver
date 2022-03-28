@@ -205,16 +205,16 @@ function tempColor(temp)
 end
 
 function shieldStrengthText(strength)
-    return (strength / 100000000) * 10
+    return ((strength / 100000000) * 10)
 
 end
 
 function shieldStrengthColor(strength)
-    if strength < 25 then
+    if shieldStrengthText(strength) < 25 then
         return colors.magenta
-    elseif strength > 50 then
+    elseif shieldStrengthText(strength) > 50 then
         return colors.green
-    elseif strength > 75 then
+    elseif shieldStrengthText(strength) > 75 then
         return colors.green
     else 
         return colors.yellow
