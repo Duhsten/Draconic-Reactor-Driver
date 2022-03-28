@@ -96,7 +96,7 @@ function update()
             error("Reactor not properly setup")
         end
         if (autoState == 1) then
-            if (ri.getReactorInfo().temperature >= 8000 or nil) then
+            if (ri.temperature >= 8000 or nil) then
                 reactorFailure("temp")
             end
 
