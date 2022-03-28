@@ -64,8 +64,8 @@ mon.monitor, mon.X, mon.Y = monitor, monX, monY
 function save_config()
     sw = fs.open("config.txt", "w")
     sw.writeLine(version)
-    sw.writeLine(autoInputGate)
-    sw.writeLine(curInputGate)
+    sw.writeLine(inputGate)
+    sw.writeLine(outputGate)
     sw.close()
 end
 
@@ -97,8 +97,8 @@ function update()
         if ri == nil then
             error("reactor has an invalid setup")
         end
-        print("Output Gate: ", fluxgate.getSignalLowFlow())
-        print("Input Gate: ", inputfluxgate.getSignalLowFlow())
+        print("Output Gate: ", outputGate.getSignalLowFlow())
+        print("Input Gate: ", inputGate.getSignalLowFlow())
 
         -- monitor output
 
