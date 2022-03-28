@@ -91,6 +91,7 @@ function update()
         driver.renderText(mon, 2, 1, "Reactor Controller", colors.white, colors.black)
         driver.renderText(mon, 2, 3, statusText(ri.status), colors.white, statusColor(ri.status))
         driver.renderText(mon, 2, 4, ri.temperature, colors.black, tempColor(ri.temperature))
+        driver.renderText(mon, 2, 5, shieldStrengthText(ri.fieldStrength), colors.black, shieldStrengthColor(ri.fieldStrength))
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
@@ -203,4 +204,20 @@ function tempColor(temp)
     end
 end
 
+function shieldStrengthText(strength)
+    return (strength / 100000000) * 10
+
+end
+
+function shieldStrengthColor(strength)
+    if strength < 25 then
+        return colors.magenta
+    elseif strength > 50 then
+        return colors.green
+    elseif strength > 75 then
+        return colors.green
+    else 
+        return colors.yellow
+    end
+end
 parallel.waitForAny(recieveCmd, update)
