@@ -105,9 +105,4 @@ function update()
     end
 end
 
-
-function commandLine()
-    print("cmd:")
-    local input = read()
-end
 parallel.waitForAny(update, commandLine)
