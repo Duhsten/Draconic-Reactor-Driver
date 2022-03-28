@@ -41,73 +41,68 @@ outputGate = driver.getComponent(gateOut)
 reactor = driver.getComponent(reactorName)
 
 if monitor == null then
-	error("Did not find Monitor")
+    error("Did not find Monitor")
 end
 
 if inputGate == null then
-	error("Did not find Input Gate")
+    error("Did not find Input Gate")
 end
 
 if outputGate == null then
-	error("Did not find Output Gate")
+    error("Did not find Output Gate")
 end
 
 if reactor == null then
-	error("Did not find Reactor")
+    error("Did not find Reactor")
 end
 
 monX, monY = monitor.getSize()
 mon = {}
-mon.monitor,mon.X, mon.Y = monitor, monX, monY
+mon.monitor, mon.X, mon.Y = monitor, monX, monY
 
---write settings to config file
+-- write settings to config file
 function save_config()
-  sw = fs.open("config.txt", "w")   
-  sw.writeLine(version)
-  sw.writeLine(autoInputGate)
-  sw.writeLine(curInputGate)
-  sw.close()
+    sw = fs.open("config.txt", "w")
+    sw.writeLine(version)
+    sw.writeLine(autoInputGate)
+    sw.writeLine(curInputGate)
+    sw.close()
 end
 
---read settings from file
+-- read settings from file
 function load_config()
-  sr = fs.open("config.txt", "r")
-  version = sr.readLine()
-  autoInputGate = tonumber(sr.readLine())
-  curInputGate = tonumber(sr.readLine())
-  sr.close()
+    sr = fs.open("config.txt", "r")
+    version = sr.readLine()
+    autoInputGate = tonumber(sr.readLine())
+    curInputGate = tonumber(sr.readLine())
+    sr.close()
 end
-
 
 -- 1st time? save our settings, if not, load our settings
 if fs.exists("config.txt") == false then
-  save_config()
+    save_config()
 else
-  load_config()
+    load_config()
 end
 
-
-
-
-
 function update()
-  while true do 
+    while true do
 
-    f.clear(mon)
+        f.clear(mon)
 
-    ri = reactor.getReactorInfo()
+        ri = reactor.getReactorInfo()
 
-    -- print out all the infos from .getReactorInfo() to term
+        -- print out all the infos from .getReactorInfo() to term
 
-    if ri == nil then
-      error("reactor has an invalid setup")
+        if ri == nil then
+            error("reactor has an invalid setup")
+        end
+        print("Output Gate: ", fluxgate.getSignalLowFlow())
+        print("Input Gate: ", inputfluxgate.getSignalLowFlow())
+
+        -- monitor output
+
     end
-    print("Output Gate: ", fluxgate.getSignalLowFlow())
-    print("Input Gate: ", inputfluxgate.getSignalLowFlow())
-
-    -- monitor output
-
-    
 end
 
 parallel.waitForAny(buttons, update)
