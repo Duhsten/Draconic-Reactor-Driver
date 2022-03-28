@@ -226,7 +226,7 @@ function shieldStrengthColor(strength)
     end
 end
 function energySatText(strength)
-    return ((strength / 100000000) * 100)
+    return ((strength / 100000000) * 10)
 
 end
 
