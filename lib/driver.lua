@@ -2,14 +2,11 @@
 
 
 function getComponent(type)
-    local names = peripheral.getNames()
-    local i, name
-    for i, name in pairs(names) do
-       if peripheral.getType(name) == type then
-          return peripheral.wrap(name)
-       end
+    if (peripheral.wrap(type) == null) then
+        return null
+    else
+        return peripheral.wrap(type)
     end
-    return null
  end
 
 function renderText(mon, x, y, text, text_color, bg_color)
