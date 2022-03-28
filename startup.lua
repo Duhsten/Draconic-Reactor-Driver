@@ -101,7 +101,7 @@ function update()
         print("Input Gate: ", inputGate.getSignalLowFlow())
 
         -- monitor output
-
+        sleep(0.1)
     end
 end
 
@@ -113,6 +113,8 @@ function recieveCmd()
         print("Requested reply frequency: "..replyFrequency)
         print("Distance: "..distance)
         print("Message is as follows: "..message)
+        sleep(0.1)
     end
+    
 end
-parallel.waitForAny(update, commandLine)
+parallel.waitForAny(update, recieveCmd)
