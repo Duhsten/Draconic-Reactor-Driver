@@ -95,7 +95,7 @@ function update()
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
-            error("reactor has an invalid setup")
+            error("Reactor not properly setup")
         end
         print("Output Gate: ", outputGate.getSignalLowFlow())
         print("Input Gate: ", inputGate.getSignalLowFlow())
@@ -105,4 +105,9 @@ function update()
     end
 end
 
-parallel.waitForAny(update)
+
+function commandLine()
+    print("cmd:")
+    local input = read()
+end
+parallel.waitForAny(update, commandLine)
