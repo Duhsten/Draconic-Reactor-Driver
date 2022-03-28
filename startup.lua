@@ -24,8 +24,8 @@ local mon, monitor, monX, monY
 
 -- peripherals
 local reactor
-local fluxgate
-local inputfluxgate
+local inputGate
+local outputGate
 
 -- reactor information
 local ri
