@@ -198,6 +198,8 @@ function tempColor(temp)
         return colors.orange
     elseif temp > 5000 then
         return colors.red
+    else 
+        return colors.yellow
     end
 end
 
