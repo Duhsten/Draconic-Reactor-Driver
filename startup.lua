@@ -95,8 +95,8 @@ function update()
         driver.renderText(mon, 2, 6, energySatText(ri.energySaturation), colors.black, energySatColor(ri.energySaturation))
 
         driver.renderText(mon, 2, 8, "Generating: " .. ri.generationRate, colors.black, colors.white)
-        driver.renderText(mon, 2, 8, "Input: " .. inputGate.getSignalLowFlow(), colors.black, colors.white)
-        driver.renderText(mon, 2, 9, "Output: " .. outputGate.getSignalLowFlow(), colors.black, colors.white)
+        driver.renderText(mon, 2, 9, "Input: " .. inputGate.getSignalLowFlow(), colors.black, colors.white)
+        driver.renderText(mon, 2, 10, "Output: " .. outputGate.getSignalLowFlow(), colors.black, colors.white)
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
