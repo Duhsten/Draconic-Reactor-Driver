@@ -105,4 +105,14 @@ function update()
     end
 end
 
+function recieveCmd()
+    while true do
+        event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
+        print("Message received from the open modem on the "..side.." side of this computer.")
+        print("Frequency: ".. frequency ..")
+        print("Requested reply frequency: "..replyFrequency..")
+        print("Distance: "..distance..")
+        print("Message is as follows: "..message)
+    end
+end
 parallel.waitForAny(update, commandLine)
