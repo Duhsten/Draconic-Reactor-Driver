@@ -89,7 +89,7 @@ function update()
 
         ri = reactor.getReactorInfo()
         driver.renderText(mon, 2, 1, "Reactor Controller", colors.white, colors.black)
-        driver.renderText(mon, 2, 3, statusText(ri.getReactorInfo().status), colors.white, statusColor(ri.getReactorInfo().status))
+        driver.renderText(mon, 2, 3, statusText(ri.status), colors.white, statusColor(ri.status))
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
