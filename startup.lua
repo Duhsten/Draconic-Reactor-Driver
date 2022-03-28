@@ -2,7 +2,7 @@
 local reactorName = "draconic_reactor_0"
 local gateIn = "flow_gate_0"
 local gateOut = "flow_gate_1"
-local monitorName = "monitor"
+local monitorName = "monitor_0"
 
 local targetStrength = 50
 local maxTemperature = 8000
