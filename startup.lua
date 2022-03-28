@@ -92,6 +92,11 @@ function update()
         driver.renderText(mon, 2, 3, statusText(ri.status), colors.white, statusColor(ri.status))
         driver.renderText(mon, 2, 4, ri.temperature, colors.black, tempColor(ri.temperature))
         driver.renderText(mon, 2, 5, shieldStrengthText(ri.fieldStrength), colors.black, shieldStrengthColor(ri.fieldStrength))
+        driver.renderText(mon, 2, 6, energySatText(ri.energySaturation), colors.black, energySatColor(ri.energySaturation))
+
+        driver.renderText(mon, 2, 8, "Generating: " .. ri.generationRate, colors.black, colors.white)
+        driver.renderText(mon, 2, 8, "Input: " .. inputGate.getSignalLowFlow(), colors.black, colors.white)
+        driver.renderText(mon, 2, 9, "Output: " .. outputGate.getSignalLowFlow(), colors.black, colors.white)
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
@@ -215,6 +220,22 @@ function shieldStrengthColor(strength)
     elseif shieldStrengthText(strength) > 50 then
         return colors.green
     elseif shieldStrengthText(strength) > 75 then
+        return colors.green
+    else 
+        return colors.yellow
+    end
+end
+function energySatText(strength)
+    return ((strength / 100000000) * 100)
+
+end
+
+function energySatColor(strength)
+    if energySatText(strength) < 25 then
+        return colors.magenta
+    elseif energySatText(strength) > 50 then
+        return colors.green
+    elseif energySatText(strength) > 75 then
         return colors.green
     else 
         return colors.yellow
