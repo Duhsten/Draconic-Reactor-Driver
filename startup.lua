@@ -121,10 +121,39 @@ function runCmd(cmd)
     local cmds = driver.splitString(cmd, " ")
     if cmds[1] == "charge" then
         reactor.chargeReactor()
-    elseif cmds[1] == "activate" or "start" then
+        modem.transmit(2, 1, "Charging Reactor")
+    elseif cmds[1] == "activate" or cmds[1] == "start" then
         reactor.activateReactor()
-    elseif cmds[1] == "deactivate" or "stop" then
+        modem.transmit(2, 1, "Activating Reactor")
+    elseif cmds[1] == "deactivate" or cmds[1] == "stop" then
         reactor.stopReactor()
+        modem.transmit(2, 1, "Stopping Reactor")
+    elseif cmds[1] == "control" or cmds[1] == "set" then
+        if cmds[2] == "auto" or cmds[2] == "automatic" then
+            autoState = 1
+            modem.transmit(2, 1, "Switching to Automatic Control")
+        elseif cmds[2] == "man" or cmds[2] == "manual" then
+            autoState = 0
+            modem.transmit(2, 1, "Switching to Manual Control")
+        else
+            modem.transmit(2, 1, "You need to clarify either Automatic or Manual")
+        end
+    elseif cmds[1] == "input" or cmds[1] == "in" then
+        if cmds[2] ~= nil then
+            manualInputGate = tonumber(cmds[2])
+            modem.transmit(2, 1, "Updated Input Gate to " .. cmds[2] .. "/s")
+        else
+            modem.transmit(2, 1, "You need to clarify an amount")
+        end
+    elseif cmds[1] == "output" or cmds[1] == "out" then
+        if cmds[2] ~= nil then
+            manualOutputGate = tonumber(cmds[2])
+            modem.transmit(2, 1, "Updated Output Gate to " .. cmds[2] .. "/s")
+        else
+            modem.transmit(2, 1, "You need to clarify an amount")
+        end
+    else
+        modem.transmit(2, 1, "Unknown Command")
     end
 end
 function recieveCmd()
@@ -159,5 +188,5 @@ function statusText(status)
         return "Critical Failure"
     end
 end
-    
+
 parallel.waitForAny(recieveCmd, update)
