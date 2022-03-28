@@ -114,17 +114,17 @@ end
 
 function reactorFailure(status)
     if status == "temp" then
-        ri.stopReactor()
+        reactor.stopReactor()
     end
 end
 function runCmd(cmd)
     local cmds = driver.splitString(cmd, " ")
     if cmds[1] == "charge" then
-        ri.chargeReactor()
+        reactor.chargeReactor()
     elseif cmds[1] == "activate" or "start" then
-        ri.activateReactor()
+        reactor.activateReactor()
     elseif cmds[1] == "deactivate" or "stop" then
-        ri.stopReactor()
+        reactor.stopReactor()
     end
 end
 function recieveCmd()
