@@ -4,11 +4,11 @@ local gateIn = "flow_gate_0"
 local gateOut = "flow_gate_1"
 local monitorName = "monitor_0"
 local modem = peripheral.wrap("back")
+modem.open(1);
 local targetStrength = 50
 local maxTemperature = 8000
 local safeTemperature = 3000
 local lowestFieldPercent = 15
-modem.open(1)
 
 local activateOnCharged = 1
 
@@ -17,8 +17,8 @@ os.loadAPI("lib/driver")
 
 local version = "0.0.1"
 -- toggleable via the monitor, use our algorithm to achieve our target field strength or let the user tweak it
-local autoInputGate = 1
-local curInputGate = 222000
+local manualInputGate = 1000;
+local manualOutputGate = 1000;
 
 -- monitor 
 local mon, monitor, monX, monY
@@ -30,11 +30,7 @@ local outputGate
 
 -- reactor information
 local ri
-
--- last performed action
-local action = "None since reboot"
-local emergencyCharge = false
-local emergencyTemp = false
+local autoState = 1
 
 monitor = driver.getComponent(monitorName)
 inputGate = driver.getComponent(gateIn)
@@ -93,10 +89,20 @@ function update()
 
         ri = reactor.getReactorInfo()
         driver.renderText(mon, 2, 1, "Reactor Controller", colors.white, colors.black)
+        driver.renderText(mon, 2, 3, statusText(ri.getReactorInfo().status), colors.white, statusColor(ri.getReactorInfo().status))
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
             error("Reactor not properly setup")
+        end
+        if (autoState == 1) then
+            if (ri.getReactorInfo().temperature >= 8000 or nil) then
+                reactorFailure("temp")
+            end
+
+        else
+            outputGate.setSignalLowFlow(manualOutputGate)
+            inputGate.setSignalLowFlow(manualInputGate)
         end
         print("Output Gate: ", outputGate.getSignalLowFlow())
         print("Input Gate: ", inputGate.getSignalLowFlow())
@@ -106,14 +112,52 @@ function update()
     end
 end
 
+function reactorFailure(status)
+    if status == "temp" then
+        ri.stopReactor()
+    end
+end
+function runCmd(cmd)
+    local cmds = driver.splitString(cmd, " ")
+    if cmds[1] == "charge" then
+        ri.chargeReactor()
+    elseif cmds[1] == "activate" or "start" then
+        ri.activateReactor()
+    elseif cmds[1] == "deactivate" or "stop" then
+        ri.stopReactor()
+    end
+end
 function recieveCmd()
-    event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
-    print("Message received from the open modem on the " .. side .. " side of this computer.")
-    print("Frequency: " .. frequency)
-    print("Requested reply frequency: " .. replyFrequency)
-    print("Distance: " .. distance)
-    print("Message is as follows: " .. message)
-    sleep(0.1)
+    while true do
+        event, side, frequency, replyFrequency, message, distance = os.pullEvent("modem_message")
+        runCmd(message)
+        sleep(0.1)
+    end
 
 end
+
+function statusColor(status)
+    if status == "warming_up" then
+        return colors.orange
+    elseif status == "cold" then
+        return colors.lightBlue
+    elseif status == "cold" then
+        return colors.lime
+    elseif status == "beyond_hope" then
+        return colors.red
+    end
+end
+
+function statusText(status)
+    if status == "warming_up" then
+        return "Charging"
+    elseif status == "cold" then
+        return "Idle"
+    elseif status == "cold" then
+        return "Active"
+    elseif status == "beyond_hope" then
+        return "Critical Failure"
+    end
+end
+    
 parallel.waitForAny(recieveCmd, update)
