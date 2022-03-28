@@ -90,6 +90,7 @@ function update()
         ri = reactor.getReactorInfo()
         driver.renderText(mon, 2, 1, "Reactor Controller", colors.white, colors.black)
         driver.renderText(mon, 2, 3, statusText(ri.status), colors.white, statusColor(ri.status))
+        driver.renderText(mon, 2, 4, ri.temperature, colors.black, tempColor(ri.temperature))
         -- print out all the infos from .getReactorInfo() to term
 
         if ri == nil then
@@ -186,6 +187,17 @@ function statusText(status)
         return "Active"
     elseif status == "beyond_hope" then
         return "Critical Failure"
+    end
+end
+function tempColor(temp)
+    if temp < 20 then
+        return colors.cyan
+    elseif temp > 20 then
+        return colors.green
+    elseif temp > 3000 then
+        return colors.orange
+    elseif temp > 5000 then
+        return colors.red
     end
 end
 
