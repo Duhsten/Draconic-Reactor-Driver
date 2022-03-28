@@ -1,7 +1,7 @@
 -- modifiable variables
 local reactorName = "draconic_reactor_0"
-local gateIn = "right"
-local gateOut = "right"
+local gateIn = "flow_gate_0"
+local gateOut = "flow_gate_1"
 local monitorName = "monitor"
 
 local targetStrength = 50
