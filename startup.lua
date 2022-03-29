@@ -273,7 +273,12 @@ function autoManage()
 
     end
     if(ri.temperature < 5000) then
-        autoOut = ri.generationRate
+        if ri.generationRate < 10000 then
+            autoOut = 10000
+        else
+            autoOut = ri.generationRate
+        end
+        
     elseif(ri.temperature > 5000) then
         autoOut = autoOut - 1000
     end
