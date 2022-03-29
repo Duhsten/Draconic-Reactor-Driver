@@ -82,8 +82,8 @@ else
     load_config()
 end
 
-local autoIn = 0
-local autoOut = 0
+local autoIn = 1
+local autoOut = 1
 function update()
     while true do
 
@@ -259,13 +259,13 @@ end
 
 function autoManage()
     if shieldStrengthText(ri.fieldStrength) > 52 then
-        autoIn = autoIn - 1000
+        autoIn = autoIn / 2
         if autoIn < 0 then
             autoIn = 0
         end
     else
         if shieldStrengthText(ri.fieldStrength) < 15 then
-            autoIn = autoIn + 1000
+            autoIn = autoIn * 2
             if autoIn > 1000000 then
                 autoIn = 1000000
             end
