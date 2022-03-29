@@ -106,7 +106,7 @@ function update()
         end
        
         if (autoState == 1 and ri.status == "running") then
-            
+            autoOut = ri.generationRate
             if shieldStrengthText(ri.fieldStrength) > 52 then
                 autoIn = autoIn - 1000
                 if autoIn < 0 then
@@ -115,7 +115,7 @@ function update()
             else if shieldStrengthText(ri.fieldStrength) < 48 then
                 autoIn = autoIn + 1000
             end
-            autoOut = ri.generationRate
+            
             end
             if (ri.temperature >= 8000 or nil) then
                 reactorFailure("temp")
