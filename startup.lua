@@ -194,7 +194,7 @@ function statusColor(status)
         return colors.lightBlue
     elseif status == "cooling" then
         return colors.blue    
-    elseif status == "cold" then
+    elseif status == "running" then
         return colors.lime
     elseif status == "stopping" then
         return colors.red   
@@ -210,7 +210,7 @@ function statusText(status)
         return "Charging"
     elseif status == "cold" then
         return "Idle"
-    elseif status == "cold" then
+    elseif status == "running" then
         return "Active"
     elseif status == "beyond_hope" then
         return "Critical Failure"
