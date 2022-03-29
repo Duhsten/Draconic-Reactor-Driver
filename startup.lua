@@ -82,6 +82,8 @@ else
     load_config()
 end
 
+local autoIn = 0
+local autoOut = 0
 function update()
     while true do
 
@@ -103,6 +105,15 @@ function update()
             error("Reactor not properly setup")
         end
         if (autoState == 1) then
+            autoIn = manualInputGate
+            autoOut = manualOutputGate
+            if shieldStrengthText(ri.fieldStrength) > 52 then
+                autoIn = autoIn - 1000
+            else if shieldStrengthText(ri.fieldStrength) < 48 then
+                autoIn = autoIn + 1000
+            end
+            autoOut = ri.generationRate
+            end
             if (ri.temperature >= 8000 or nil) then
                 reactorFailure("temp")
             end
@@ -181,6 +192,8 @@ function statusColor(status)
         return colors.lime
     elseif status == "beyond_hope" then
         return colors.red
+    else
+        return colors.yellow
     end
 end
 
@@ -193,6 +206,8 @@ function statusText(status)
         return "Active"
     elseif status == "beyond_hope" then
         return "Critical Failure"
+    else
+        return "Unknown"
     end
 end
 function tempColor(temp)
