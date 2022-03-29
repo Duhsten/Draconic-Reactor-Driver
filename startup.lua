@@ -210,6 +210,8 @@ function statusText(status)
         return "Charging"
     elseif status == "cold" then
         return "Idle"
+    elseif status == "cooling" then
+        return "Cooling"    
     elseif status == "running" then
         return "Active"
     elseif status == "beyond_hope" then
