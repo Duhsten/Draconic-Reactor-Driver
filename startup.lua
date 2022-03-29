@@ -93,8 +93,10 @@ function update()
         driver.renderText(mon, 2, 1, "Reactor Controller", colors.white, colors.black)
         driver.renderText(mon, 2, 3, statusText(ri.status), colors.white, statusColor(ri.status))
         driver.renderText(mon, 2, 4, "Temp: " .. ri.temperature, colors.black, tempColor(ri.temperature))
-        driver.renderText(mon, 2, 5, "Shield: " .. shieldStrengthText(ri.fieldStrength), colors.black, shieldStrengthColor(ri.fieldStrength))
-        driver.renderText(mon, 2, 6, "EnergySat: " .. energySatText(ri.energySaturation), colors.black, energySatColor(ri.energySaturation))
+        driver.renderText(mon, 2, 5, "Shield: " .. shieldStrengthText(ri.fieldStrength), colors.black,
+            shieldStrengthColor(ri.fieldStrength))
+        driver.renderText(mon, 2, 6, "EnergySat: " .. energySatText(ri.energySaturation), colors.black,
+            energySatColor(ri.energySaturation))
 
         driver.renderText(mon, 2, 8, "Generating: " .. ri.generationRate, colors.black, colors.white)
         driver.renderText(mon, 2, 9, "Input: " .. inputGate.getSignalLowFlow(), colors.black, colors.white)
@@ -109,22 +111,7 @@ function update()
             inputGate.setSignalLowFlow(150000)
         end
         if (autoState == 1 and ri.status == "running") then
-            autoOut = ri.generationRate
-            if shieldStrengthText(ri.fieldStrength) > 52 then
-                autoIn = autoIn - 1000
-                if autoIn < 0 then
-                    autoIn = 0
-                end
-            else if shieldStrengthText(ri.fieldStrength) < 48 then
-                autoIn = autoIn + 1000
-            end
-            
-            end
-            if (ri.temperature >= 8000 or nil) then
-                reactorFailure("temp")
-            end
-            outputGate.setSignalLowFlow(autoOut)
-            inputGate.setSignalLowFlow(autoIn)
+            autoManage()
         else
             outputGate.setSignalLowFlow(manualOutputGate)
             inputGate.setSignalLowFlow(manualInputGate)
@@ -191,16 +178,16 @@ function recieveCmd()
 end
 
 function statusColor(status)
-    if status == "warming_up"then
+    if status == "warming_up" then
         return colors.orange
     elseif status == "cold" then
         return colors.lightBlue
     elseif status == "cooling" then
-        return colors.blue    
+        return colors.blue
     elseif status == "running" then
         return colors.lime
     elseif status == "stopping" then
-        return colors.red   
+        return colors.red
     elseif status == "beyond_hope" then
         return colors.red
     else
@@ -214,7 +201,7 @@ function statusText(status)
     elseif status == "cold" then
         return "Idle"
     elseif status == "cooling" then
-        return "Cooling"    
+        return "Cooling"
     elseif status == "running" then
         return "Active"
     elseif status == "beyond_hope" then
@@ -232,7 +219,7 @@ function tempColor(temp)
         return colors.orange
     elseif temp > 5000 then
         return colors.red
-    else 
+    else
         return colors.yellow
     end
 end
@@ -249,7 +236,7 @@ function shieldStrengthColor(strength)
         return colors.green
     elseif shieldStrengthText(strength) > 75 then
         return colors.green
-    else 
+    else
         return colors.yellow
     end
 end
@@ -265,8 +252,37 @@ function energySatColor(strength)
         return colors.green
     elseif energySatText(strength) > 75 then
         return colors.green
-    else 
+    else
         return colors.yellow
     end
+end
+
+function autoManage()
+    if shieldStrengthText(ri.fieldStrength) > 52 then
+        autoIn = autoIn - 1000
+        if autoIn < 0 then
+            autoIn = 0
+        end
+    else
+        if shieldStrengthText(ri.fieldStrength) < 48 then
+            autoIn = autoIn + 1000
+            if autoIn > 1000000 then
+                autoIn = 1000000
+            end
+        end
+
+    end
+    if(ri.temperature < 5000) then
+        autoOut = ri.generationRate
+    elseif(ri.temperature > 5000) then
+        autoOut = autoOut - 1000
+    end
+
+    if (ri.temperature >= 8000 or nil) then
+        reactorFailure("temp")
+    end
+    outputGate.setSignalLowFlow(autoOut)
+    inputGate.setSignalLowFlow(autoIn)
+
 end
 parallel.waitForAny(recieveCmd, update)
