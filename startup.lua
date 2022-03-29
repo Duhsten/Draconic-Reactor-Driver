@@ -104,11 +104,14 @@ function update()
         if ri == nil then
             error("Reactor not properly setup")
         end
-        if (autoState == 1) then
-            autoIn = manualInputGate
-            autoOut = manualOutputGate
+       
+        if (autoState == 1 and ri.status == "running") then
+            
             if shieldStrengthText(ri.fieldStrength) > 52 then
                 autoIn = autoIn - 1000
+                if autoIn < 0 then
+                    autoIn = 0
+                end
             else if shieldStrengthText(ri.fieldStrength) < 48 then
                 autoIn = autoIn + 1000
             end
@@ -117,8 +120,8 @@ function update()
             if (ri.temperature >= 8000 or nil) then
                 reactorFailure("temp")
             end
-            outputGate.setSignalLowFlow(autoIn)
-            inputGate.setSignalLowFlow(autoOut)
+            outputGate.setSignalLowFlow(autoOut)
+            inputGate.setSignalLowFlow(autoIn)
         else
             outputGate.setSignalLowFlow(manualOutputGate)
             inputGate.setSignalLowFlow(manualInputGate)
@@ -185,12 +188,16 @@ function recieveCmd()
 end
 
 function statusColor(status)
-    if status == "warming_up" then
+    if status == "warming_up"then
         return colors.orange
     elseif status == "cold" then
         return colors.lightBlue
+    elseif status == "cooling" then
+        return colors.blue    
     elseif status == "cold" then
         return colors.lime
+    elseif status == "stopping" then
+        return colors.red   
     elseif status == "beyond_hope" then
         return colors.red
     else
