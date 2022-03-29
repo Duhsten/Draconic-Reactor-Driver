@@ -104,7 +104,10 @@ function update()
         if ri == nil then
             error("Reactor not properly setup")
         end
-       
+        if ri.status == "warming_up" then
+            outputGate.setSignalLowFlow(0)
+            inputGate.setSignalLowFlow(150000)
+        end
         if (autoState == 1 and ri.status == "running") then
             autoOut = ri.generationRate
             if shieldStrengthText(ri.fieldStrength) > 52 then
