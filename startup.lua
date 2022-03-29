@@ -264,7 +264,7 @@ function autoManage()
             autoIn = 0
         end
     else
-        if shieldStrengthText(ri.fieldStrength) < 25 then
+        if shieldStrengthText(ri.fieldStrength) < 35 then
             autoIn = autoIn * 2
             if autoIn > 1000000 then
                 autoIn = 1000000
