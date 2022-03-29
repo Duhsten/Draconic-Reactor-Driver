@@ -117,7 +117,8 @@ function update()
             if (ri.temperature >= 8000 or nil) then
                 reactorFailure("temp")
             end
-
+            outputGate.setSignalLowFlow(autoIn)
+            inputGate.setSignalLowFlow(autoOut)
         else
             outputGate.setSignalLowFlow(manualOutputGate)
             inputGate.setSignalLowFlow(manualInputGate)
